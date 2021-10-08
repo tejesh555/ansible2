@@ -1,0 +1,23 @@
+---
+- hosts: all
+  tasks:
+          - name: create a file
+            file:
+                    path: /home/devops/{{item}}         
+                    state: touch
+            with_items:
+                    - a
+                    - b
+                    - c
+                    - d
+
+          - name: register
+            shell: ls /home/devops
+            register: var_name
+
+          - name: print the register
+            debug: 
+               msg: "{{ var_name.stdout_lines }}"
+
+
+

@@ -1,0 +1,84 @@
+---
+# tasks file for tom-install
+- name: add user
+  user:
+          name: tomcat
+          state: present
+          shell: /bin/false
+          create_home: yes
+          home: /opt/tomcat
+          #group: tomcat
+
+- name: download tomcat tar
+  get_url:
+          url: https://www-eu.apache.org/dist/tomcat/tomcat-9/v{{version}}/bin/apache-tomcat-{{version}}.tar.gz
+          dest: /tmp
+
+- name: untar
+  unarchive:
+          src: /tmp/apache-tomcat-{{ version }}.tar.gz
+          dest: /opt/tomcat
+          remote_src: yes
+
+- name: create symbolic link
+  file: 
+        src: /opt/tomcat/apache-tomcat-{{ version }}
+        dest: /opt/tomcat/latest
+        state: link
+
+- name: Change the ownership to tomcat
+  file:
+    path: /opt/tomcat
+    group: tomcat
+    owner: tomcat
+    recurse: yes
+
+- name: list the sh file in bin folder
+  shell: ls /opt/tomcat/latest/bin/*.sh
+  register: lst 
+
+- name: give the excutable premissions
+  file:   
+     path: "{{item}}"
+     mode: 0777
+  with_items:  "{{lst.stdout_lines}}"  
+
+- name: update the service file
+  template:
+          src: templates/service.j2
+          dest: /etc/systemd/system/tomcat.service
+
+- name: enabling the tomcat servie
+  systemd:
+    name: tomcat
+    daemon_reload: yes
+    enabled: True
+
+- name: restart the tomcat servie
+  systemd:
+    name: tomcat
+    state: restarted
+
+- name: add users into tomcat
+  lineinfile:
+          path: /opt/tomcat/latest/conf/tomcat-users.xml
+          insertbefore: '^</tomcat-users>'
+          line: "{{ item }}"
+  with_items:
+          - <role rolename="admin-gui"/>
+          - <role rolename="manager-gui"/>
+          - <user username="admin" password="password" roles="admin-gui,manager-gui"/>
+
+- name: delete the lines
+  lineinfile:
+    path: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
+    regexp: "{{ item }}"
+    state: absent
+  with_items:
+    - Valve className
+    - 0:0:0:0:0:0:0:1
+
+- name: restart tomcat
+  systemd:
+      name: tomcat
+      state: restarted

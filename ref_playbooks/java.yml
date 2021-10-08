@@ -1,0 +1,18 @@
+--- 
+- hosts: arch
+  become: true
+  #  vars:
+  #        - java_deb: openjdk-8-jdk
+  #        - java_rhel: java-1.8.0-openjdk
+  tasks:
+          - name: isntall java in ubuntu
+            apt:
+                    name: "{{ java_deb }}"
+                    state: present
+            when: ansible_os_family == "Debian"
+
+          - name: install java in rhel
+            yum:
+                    name: "{{ java_rhel }}"
+                    state: present
+            when: ansible_os_family == "RedHat"

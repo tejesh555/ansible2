@@ -1,0 +1,22 @@
+---
+- hosts: all
+  vars:
+          - name: tejesh
+            age: 28
+            car: tata
+  tasks:
+          - name: print name 
+            debug:
+                    var: name
+
+          - name: print age
+            debug:
+                    msg: "{{ age }}"
+
+          - name: print car
+            debug: 
+                    var: car
+            vars: 
+               - car: mahindra
+
+

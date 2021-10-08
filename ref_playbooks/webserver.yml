@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: true
+  #  gather_facts: false
+  tasks:
+          - name: install webserver
+            apt:
+                    name: apache2
+                    state: latest
+
+          - name: update index.html
+            template:
+                   src: /home/devops/index.j2
+                   dest: /var/www/html/index.html
+            notify:
+                    - restart the apache service
+
+  handlers:
+          - name: restart the apache service
+            service:
+                    name: apache2
+                    state: restarted

@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+          - name: if else
+            block:
+                    - name: install apache2
+                      apt:
+                              name: apache2
+                              state: present
+
+            rescue:
+                    - name: install httpd
+                      yum:
+                              name: httpd
+                              state: latest 

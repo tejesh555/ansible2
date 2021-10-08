@@ -1,0 +1,11 @@
+---
+- name: copy the war file into webapps
+  copy:
+          src: /home/devops/workspace/target/applogin-1.0.war
+          dest: /opt/tomcat/latest/webapps
+          owner: tomcat
+          group: tomcat
+          mode: 0664
+  notify:
+          - restart tomcat
+# tasks file for deploy

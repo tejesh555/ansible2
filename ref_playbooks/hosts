@@ -1,0 +1,23 @@
+[all]
+	[ubuntu]
+	172.31.39.108
+	172.31.1.72
+
+	[rhel]
+	172.31.42.119
+
+	[arch:children]
+	ubuntu
+	rhel
+    
+        [canada]
+        172.31.39.108
+        172.31.1.72
+
+
+[all:vars]
+java_rhel=java-1.8.0-openjdk
+java_deb=openjdk-8-jdk 
+name=ASWANTH VARMA
+age=21
+car=JAGUAR
