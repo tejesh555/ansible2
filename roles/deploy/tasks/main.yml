@@ -1,7 +1,7 @@
 ---
 - name: copy the war file into webapps
   copy:
-          src: /home/devops/workspace/end-end/target/applogin-1.0.war
+          src: /home/ansible/workspace/end-end/target/applogin-1.0.war
           dest: /opt/tomcat/latest/webapps
           owner: tomcat
           group: tomcat
