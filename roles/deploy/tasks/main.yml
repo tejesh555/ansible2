@@ -1,11 +1,8 @@
 ---
 - name: copy the war file into webapps
-  copy:
-          src: /home/ansible/workspace/end-end/target/applogin-1.0.war
-          dest: /opt/tomcat/latest/webapps
-          owner: tomcat
-          group: tomcat
-          mode: 0664
+  get_url:
+    url: https://github.com/tejesh555/applogin/raw/master/target/applogin.war
+    dest: /tmp
   notify:
           - restart tomcat
 # tasks file for deploy
