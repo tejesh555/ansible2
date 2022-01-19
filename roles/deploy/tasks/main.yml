@@ -3,6 +3,14 @@
   get_url:
     url: https://github.com/tejesh555/applogin/raw/master/target/applogin.war
     dest: /tmp
+    
+- name: copy artifact 
+  copy:
+     src: /tmp/applogin.war
+     dest: /opt/tomcat/latest/webapps/applogin.war
+     owner: tomcat
+     group: tomcat
+     remote_src: yes
   notify:
           - restart tomcat
 # tasks file for deploy
